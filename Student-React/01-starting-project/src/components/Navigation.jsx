@@ -17,15 +17,25 @@ import { Link, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/Inbox";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
   { text: "Profile", icon: <InboxIcon />, path: "/profilePage" },
   { text: "Topics", icon: <InboxIcon />, path: "/topicsPage" },
   { text: "Progress", icon: <InboxIcon />, path: "/progressPage" },
+  { text: "Logout", icon: <InboxIcon />, action: "logout" },
 ];
 
 const Navigation = ({ handleDrawerToggle, mobileOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+
+    navigate("/");
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -47,16 +57,26 @@ const Navigation = ({ handleDrawerToggle, mobileOpen }) => {
             </Button>
           </Box>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
-              <Button
-                key={item.text}
-                sx={{ color: "#fff" }}
-                component={Link}
-                to={item.path}
-              >
-                {item.text}
-              </Button>
-            ))}
+            {navItems.map((item) =>
+              item.action === "logout" ? (
+                <Button
+                  key={item.text}
+                  sx={{ color: "#fff" }}
+                  onClick={handleLogout}
+                >
+                  {item.text}
+                </Button>
+              ) : (
+                <Button
+                  key={item.text}
+                  sx={{ color: "#fff" }}
+                  component={Link}
+                  to={item.path}
+                >
+                  {item.text}
+                </Button>
+              )
+            )}
           </Box>
         </Toolbar>
       </AppBar>
@@ -81,21 +101,32 @@ const Navigation = ({ handleDrawerToggle, mobileOpen }) => {
           </Typography>
           <Divider />
           <List>
-            {navItems.map((item) => (
-              <ListItem key={item.text} disablePadding>
-                <ListItemButton
-                  component={Link}
-                  to={item.path}
-                  sx={{
-                    textAlign: "center",
-                    color:
-                      location.pathname === item.path ? "black" : "inherit",
-                  }}
-                >
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            {navItems.map((item) =>
+              item.action === "logout" ? (
+                <ListItem key={item.text} disablePadding>
+                  <ListItemButton
+                    onClick={handleLogout}
+                    sx={{ textAlign: "center" }}
+                  >
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </ListItem>
+              ) : (
+                <ListItem key={item.text} disablePadding>
+                  <ListItemButton
+                    component={Link}
+                    to={item.path}
+                    sx={{
+                      textAlign: "center",
+                      color:
+                        location.pathname === item.path ? "black" : "inherit",
+                    }}
+                  >
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </ListItem>
+              )
+            )}
           </List>
         </Box>
       </Drawer>

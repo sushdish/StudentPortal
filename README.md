@@ -67,7 +67,6 @@ cd StudentPortal
 
 🔹 Topics Page
 
-![Topics Page Screenshot](Student-React/01-starting-project/src/images/All Topics.png)
 ![Topics Page Screenshot](Student-React/01-starting-project/src/images/Topics 1.png)
 
 🔹 Progress Page
